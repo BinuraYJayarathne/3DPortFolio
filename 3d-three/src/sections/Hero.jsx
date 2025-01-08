@@ -2,12 +2,15 @@ import { Canvas } from '@react-three/fiber';
 import React, { Suspense } from 'react';
 import HackerRoom from '../Components/HackerRoom';
 import CanvasLoader from '../Components/CanvasLoader';
-import { PerspectiveCamera } from '@react-three/drei';
-import { Leva, useControls } from 'leva';
+import { PerspectiveCamera, Ring } from '@react-three/drei';
+import { useControls } from 'leva';
 import { Controls } from 'three';
 import { calculateSizes } from '../constants';
 import {useMediaQuery} from 'react-responsive';
 import Target from '../Components/Target';
+import ReactLogo from '../Components/ReactLogo';
+import Cube from '../Components/Cube';
+import HeroCamera from '../Components/HeroCamera';
 
 const Hero = () => {
 
@@ -76,21 +79,24 @@ const Hero = () => {
       </div>
 
       <div className='w-full h-full absolute inset-0'>
-        {/* <Leva/> */}
+        
         <Canvas className="w-full h-full">
           <Suspense fallback={<CanvasLoader/>}>
             <PerspectiveCamera makeDefault position={[0,0,30]}/>
-            <HackerRoom 
-              //scale={0.05} 
-              // position={[0,0,0]} 
-              // rotation={[0,-Math.PI / 2.0]}
-              position = {sizes.deskPosition}
-              rotation = {[0, -Math.PI, 0]}
-              scale={sizes.deskScale}
-            />
-
+            
+            <HeroCamera isMobile={isMobile}>
+              <HackerRoom 
+                position = {sizes.deskPosition}
+                rotation = {[0, -Math.PI, 0]}
+                scale={sizes.deskScale}
+              />
+            </HeroCamera>
+            
             <group>
               <Target position = {sizes.targetPosition} />
+              <ReactLogo position = {sizes.reactLogoPosition} />
+              <Cube position = {sizes.cubePosition} />
+              <Ring position={sizes.ringPosition} />
             </group>
             
             <ambientLight intensity={2} />
@@ -98,6 +104,7 @@ const Hero = () => {
           </Suspense>
         </Canvas>
       </div>
+
     </section>
   );
 };
